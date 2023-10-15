@@ -1,0 +1,99 @@
+{
+	"info": {
+		"_postman_id": "d076c62d-7d9c-4a18-91b2-eefe9057f6db",
+		"name": "Candidatos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetCandidato",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/candidato/info/test1@correo.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"candidato",
+						"info",
+						"test1@correo.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "InsertUpdateCandidato",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"edad\": 55,\r\n    \"numero_telefono\": \"456789\",\r\n    \"email\": \"test1@correo.com\",\r\n    \"experiencia\": [\r\n        {\r\n            \"nombre_empresa\": \"Movistar\",\r\n            \"fecha_inicio\": null,\r\n            \"fecha_fin\": null,\r\n            \"actual\": 0,\r\n            \"descripcion_actividades\": null,\r\n            \"id_rol\": 1\r\n        }\r\n    ],\r\n    \"informacionAcademica\": [\r\n        {\r\n            \"institucion\": \"Universidad de Palermo\",\r\n            \"titulo\": \"Ingeniero de sodtware\"\r\n        }\r\n    ],\r\n    \"habilidadesBlandas\": [1,2],\r\n    \"habilidadesTecnicas\": [1,2],\r\n    \"idiomas\": [1,2]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/candidato/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"candidato",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetMetadata",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/candidato/metadata",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"candidato",
+						"metadata"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
