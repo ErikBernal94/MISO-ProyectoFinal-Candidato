@@ -9,10 +9,10 @@ kind: Deployment
 # Metadatos del elemento
 metadata:
   # Nombre
-  name: evaluacion
+  name: candidato
   # Etiqueta del Deployment
   labels:
-    app: evaluacion
+    app: candidato
 # Especificaciones del elemento
 spec:
   replicas: 2
@@ -21,22 +21,22 @@ spec:
   selector:
     # En este caso va a seleccionar aquellos que coincidan con el nombre del deploy
     matchLabels:
-      app: evaluacion
+      app: candidato
 
   # En esta sección definimos el contenido del pod y declaramos los contenedores
   template:
     metadata:
       labels:
         # Esta es la etiqueta que se le asigna al pod, debe ser igual al selector (linea 24)
-        app: evaluacion
+        app: candidato
     spec:
       # Declaracion de contenedores
       # name: Nombre del contenedor
       # image: Nombre de la imagen, por defecto buscara en Docker Hub o en el repositorio privado
       #        configurado en K8s
       containers:
-        - name: evaluacion
-          image: us-central1-docker.pkg.dev/proyecto-final-miso/proyecto-final-miso-experimento-latencia/evaluacion:7.0
+        - name: candidato
+          image: us-central1-docker.pkg.dev/abc-jobs-cicd/repository-candidato/job-cloudbuild:dc4b86b
           resources:
             requests:
               memory: "64Mi"
@@ -65,7 +65,7 @@ spec:
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
 metadata:
-  name: evaluacion-config
+  name: candidato-config
 spec:
   healthCheck:
     checkIntervalSec: 30
@@ -76,13 +76,13 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: servicio-evaluacion
+  name: servicio-candidato
   annotations:
-    cloud.google.com/backend-config: '{"default": "evaluacion-config"}'
+    cloud.google.com/backend-config: '{"default": "candidato-config"}'
 spec:
   type: NodePort
   selector:
-    app: evaluacion
+    app: candidato
   ports:
     - protocol: TCP
       port: 80
@@ -101,10 +101,10 @@ spec:
   - http:
       paths:
       - pathType: Prefix
-        path: /evaluacion
+        path: /candidato
         backend:
           service:
-            name: servicio-evaluacion
+            name: servicio-candidato
             port: 
               number: 80
       
