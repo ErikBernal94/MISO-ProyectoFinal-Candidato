@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/candidato', candidatoRouter);
 // app.use('/evaluacion/pregunta', preguntasRouter);
-app.use('/healthcheck', healthcheckRouter);
+app.use('/candidato/healthcheck', healthcheckRouter);
 
 
 // catch 404 and forward to error handler
