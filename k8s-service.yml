@@ -87,7 +87,7 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 3000
-      nodePort: 31018
+      nodePort: 31020
 
 ---
 apiVersion: networking.k8s.io/v1
