@@ -24,4 +24,4 @@ ENTRYPOINT [ "npm", "start" ]
 # Archivo principal donde corre el API
 CMD ["app.js" ]
 
-EXPOSE 3002
+EXPOSE 3000
