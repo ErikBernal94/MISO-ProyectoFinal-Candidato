@@ -1,18 +1,14 @@
+const express = require('express');
+const supertest = require('supertest');
+const router = require('../routes/healthcheck'); // Reemplaza con la ubicación real de tus rutas
+const app = express();
+app.use('/', router);
+const request = supertest(app);
 
-// const data = require('../data/emails.data.js');
-// jest.mock('../db/db.js') 
-// const db = require('../db/db.js');
-
-// test('get emails', () => {
-//     db.query.mockImplementation("", cb => cb('valor'))
-//     data.getEmails((result)=>{
-//         expect(result).toBe('valor')
-//     })
-// });
-
-// test('post email', () => {
-//     db.query.mockImplementation("", cb => cb('valor'))
-//     data.postEmail((result)=>{
-//         expect(result).toBe('valor')
-//     })
-// });
+describe('Rutas', () => {
+  it('Debería responder con el mensaje correcto', async () => {
+    const res = await request.get('/');
+    expect(res.status).toBe(200);
+    expect(res.text).toBe('ok');
+  });
+});

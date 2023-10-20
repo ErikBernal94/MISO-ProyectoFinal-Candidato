@@ -9,34 +9,34 @@ kind: Deployment
 # Metadatos del elemento
 metadata:
   # Nombre
-  name: evaluacion
+  name: candidato
   # Etiqueta del Deployment
   labels:
-    app: evaluacion
+    app: candidato
 # Especificaciones del elemento
 spec:
-  replicas: 2
+  replicas: 1
   # K8s agrupa los elementos del Deployment y los interconecta entre si utilizando etiquetas
   # Aqui definimos como seleccionar los elementos juntos
   selector:
-    # En este caso va a seleccionar aquellos que coincidan con el nombre del deploy
+    # En este caso va a seleccionar aquellos que coincidan con el nombre del  deploy
     matchLabels:
-      app: evaluacion
+      app: candidato
 
   # En esta sección definimos el contenido del pod y declaramos los contenedores
   template:
     metadata:
       labels:
         # Esta es la etiqueta que se le asigna al pod, debe ser igual al selector (linea 24)
-        app: evaluacion
+        app: candidato
     spec:
       # Declaracion de contenedores
       # name: Nombre del contenedor
       # image: Nombre de la imagen, por defecto buscara en Docker Hub o en el repositorio privado
-      #        configurado en K8s
+      #        configurado en K8s 
       containers:
-        - name: evaluacion
-          image: us-central1-docker.pkg.dev/proyecto-final-miso/proyecto-final-miso-experimento-latencia/evaluacion:7.0
+        - name: job-cloudbuild
+          image: us-central1-docker.pkg.dev/abc-jobs-cicd/repository-candidato/job-cloudbuild:976723d
           resources:
             requests:
               memory: "64Mi"
@@ -44,20 +44,10 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "500m"
-          env:
-            - name: "SQLALCHEMY_DATABASE_URI"
-              valueFrom:
-                secretKeyRef:
-                  name: appsecrets 
-                  key: uri
           ports:
-            - containerPort: 3000
+            - containerPort: 3002
           # Realizar pull siempre a la imagen
           imagePullPolicy: Always
-      volumes:
-        - name: appsecrets-volume
-          secret:
-            secretName: appsecrets
 
 # Vamos a especificar el balanceador de carga en este mismo archivo
 # para ello vamos a crear otro documento separado, esto se hace con el operador "---"
@@ -65,29 +55,29 @@ spec:
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
 metadata:
-  name: evaluacion-config
+  name: candidato-config
 spec:
   healthCheck:
     checkIntervalSec: 30
-    port: 3000
+    port: 3002
     type: HTTP
-    requestPath: /healthcheck
+    requestPath: /candidato/healthcheck
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: servicio-evaluacion
+  name: servicio-candidato
   annotations:
-    cloud.google.com/backend-config: '{"default": "evaluacion-config"}'
+    cloud.google.com/backend-config: '{"default": "candidato-config"}'
 spec:
   type: NodePort
   selector:
-    app: evaluacion
+    app: candidato
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 3000
-      nodePort: 31018
+      targetPort: 3002
+      nodePort: 31020
 
 ---
 apiVersion: networking.k8s.io/v1
@@ -100,6 +90,27 @@ spec:
   rules:
   - http:
       paths:
+      - pathType: Prefix
+        path: /candidato
+        backend:
+          service:
+            name: servicio-candidato
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: /registro
+        backend:
+          service:
+            name: servicio-registro
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: /empresa
+        backend:
+          service:
+            name: servicio-empresa
+            port: 
+              number: 80              
       - pathType: Prefix
         path: /evaluacion
         backend:

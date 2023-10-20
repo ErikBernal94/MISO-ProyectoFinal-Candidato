@@ -1,0 +1,64 @@
+# This step runs the unit tests on the app
+steps:
+  - name: "gcr.io/cloud-builders/npm"
+    args: ["install"]
+
+  - name: "gcr.io/cloud-builders/npm"
+    args: ["run", "test"]
+
+  # This step builds the container image.
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Build
+    args:
+    - 'build'
+    - '-t'
+    - 'us-central1-docker.pkg.dev/$PROJECT_ID/repository-candidato/job-cloudbuild:$SHORT_SHA'
+    - '.'
+
+  # This step pushes the image to Artifact Registry
+  # The PROJECT_ID and SHORT_SHA variables are automatically
+  # replaced by Cloud Build.
+  - name: 'gcr.io/cloud-builders/docker'
+    id: Push
+    args:
+    - 'push'
+    - 'us-central1-docker.pkg.dev/$PROJECT_ID/repository-candidato/job-cloudbuild:$SHORT_SHA'
+  
+  
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: print 1
+    entrypoint: /bin/sh
+    args:
+    - '-c'
+    - |
+      sed -n l k8s-service.yml
+
+  # This step generates the new manifest
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: Generate manifest
+    entrypoint: /bin/sh
+    args:
+    - '-c'
+    - |
+      sed "s/COMMIT_SHA/${SHORT_SHA}/" k8s-service.yml
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: print
+    entrypoint: /bin/sh
+    args:
+    - '-c'
+    - |
+      sed -n l k8s-service.yml
+
+  # This step deploys the new version of our container image
+  # in the hello-cloudbuild Kubernetes Engine cluster.
+  - name: 'gcr.io/cloud-builders/kubectl'
+    id: Deploy
+    args:
+    - 'apply'
+    - '-f'
+    - 'k8s-service.yml'
+    env:
+    - 'CLOUDSDK_COMPUTE_REGION=us-central1'
+    - 'CLOUDSDK_CONTAINER_CLUSTER=job-cloudbuild'
+    - 'COMMIT_SHA_TEST=$SHORT_SHA'
