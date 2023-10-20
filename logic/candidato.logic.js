@@ -15,8 +15,17 @@ class CandidatoLogic {
 
     obtener(correo){
         return new Promise(async (resolve,reject)=>{
-            var candidato = await candidatoData.obtener(correo);
-            resolve(candidato);
+            try {
+                var candidato = await candidatoData.obtener(correo);
+                if(!candidato){
+                    let usuario = await usuarioData.obtener(correo);
+                    candidato = { usuario: usuario };
+                }
+                resolve(candidato);    
+            } catch (error) {
+                reject(error);
+            }
+            
         })
     }
 
@@ -29,7 +38,7 @@ class CandidatoLogic {
                     return;
                 }
                 console.log(usuariosBD);
-                await candidatoData.insertar(candidato, usuariosBD[0]);
+                await candidatoData.insertar(candidato, usuariosBD);
                 resolve('Informacion de candidato actualizada/insertada');    
             } catch (error) {
                 reject(error);

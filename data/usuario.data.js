@@ -12,7 +12,7 @@ class UsuarioData{
                   email: correo
                 }
               });
-            resolve(usuarioDB);
+            resolve(usuarioDB[0]);
         });
     }
 }

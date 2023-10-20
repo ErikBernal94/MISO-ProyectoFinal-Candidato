@@ -34,14 +34,15 @@ const candidato = sequelize.define('candidato', {
 
   usuario.hasOne(candidato, {foreignKey: 'id_usuario'});
   candidato.belongsTo(usuario, {foreignKey: 'id_usuario'});
-  candidato.hasMany(informacionAcademica, {foreignKey: 'id_candidato'});
-  informacionAcademica.belongsTo(candidato, {foreignKey: 'id_candidato'});
+  candidato.hasMany(informacionAcademica, {as:'informacionAcademica', foreignKey: 'id_candidato'});
+  informacionAcademica.belongsTo(candidato, {as:'informacionAcademica', foreignKey: 'id_candidato'});
   candidato.hasMany(experiencia, {foreignKey: 'id_candidato'});
   experiencia.belongsTo(candidato, {foreignKey: 'id_candidato'});
   candidato.belongsToMany(habilidad_blanda, {
     through: 'habilidadBlandaCandidato',
     foreignKey: 'id_candidato',
-    otherKey: 'id_habilidad_blanda'
+    otherKey: 'id_habilidad_blanda',
+    as: 'habilidadesBlandas'
   });
   habilidad_blanda.belongsToMany(candidato, {
     through: 'habilidadBlandaCandidato',
@@ -51,7 +52,8 @@ const candidato = sequelize.define('candidato', {
   candidato.belongsToMany(habilidad_tecnica, {
     through: 'habilidadTecnicaCandidato',
     foreignKey: 'id_candidato',
-    otherKey: 'id_habilidad_tecnica'
+    otherKey: 'id_habilidad_tecnica',
+    as: 'habilidadesTecnicas'
   });
   habilidad_tecnica.belongsToMany(candidato, {
     through: 'habilidadTecnicaCandidato',

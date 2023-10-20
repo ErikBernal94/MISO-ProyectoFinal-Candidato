@@ -14,43 +14,62 @@ class CandidatoData{
 
     obtener(correoCandidato){
         return new Promise(async (resolve,reject)=>{
-            var candidato = await candidatoModel.findAll({
-                include: [
-                    {
-                        model: usuario,
-                        required: true,
-                        where: {
-                            email: correoCandidato
-                        }
-                    },
-                    {
-                        model: experiencia,
-                        required: false,
-                        include : {
-                            model: rol,
-                            required: false
-                        }
-                    },
-                    {
-                        model: habilidad_blanda,
-                        required: false,
-                    },
-                    {
-                        model: habilidad_tecnica,
-                        required: false
-                    },
-                    {
-                        model: idioma,
-                        required: false
-                    },
-                    {
-                        model: informacionAcademica,
-                        required: false
-                    },
-
-                ]
-            });
-            resolve(candidato[0]);
+            try {
+                var candidato = await candidatoModel.findAll({
+                    attributes: {exclude: ["id_usuario"]},
+                    include: [
+                        {
+                            model: usuario,
+                            required: true,
+                            where: {
+                                email: correoCandidato
+                            }
+                        },
+                        {
+                            model: experiencia,
+                            required: false,
+                            attributes: {exclude: ["id_rol"]},
+                            include : {
+                                model: rol,
+                                required: false
+                            }
+                        },
+                        {
+                            model: habilidad_blanda,
+                            required: false,
+                            through: {
+                                attributes: []
+                            },
+                            as: "habilidadesBlandas"
+                        },
+                        {
+                            model: habilidad_tecnica,
+                            required: false,
+                            through: {
+                                attributes: []
+                            },
+                            as: 'habilidadesTecnicas'
+                        },
+                        {
+                            model: idioma,
+                            required: false,
+                            through: {
+                                attributes: []
+                            }
+                        },
+                        {
+                            model: informacionAcademica,
+                            required: false,
+                            as: 'informacionAcademica'
+                        },
+    
+                    ]
+                });
+                resolve(candidato[0]);    
+            } catch (error) {
+                reject(error);
+            }
+            
         });
     }
 

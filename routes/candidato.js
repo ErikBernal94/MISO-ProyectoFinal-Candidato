@@ -1,11 +1,30 @@
 var logicaCandidato = require ('../logic/candidato.logic');
 
 var express = require('express');
+const Joi = require('joi');
 
 var router = express.Router();
 
+const schemaGet = Joi.object({
+    correoCandidato: Joi.string().min(6).max(200).required().email()
+});
+const schemaPost = Joi.object({
+    email: Joi.string().min(6).max(200).required().email(),
+    edad: Joi.number().integer().min(0).required(),
+    id_pais: Joi.number().integer().min(0).required(),
+    numero_telefono: Joi.string().min(6).max(20).required()
+});
+
+
+
 router.get('/info/:correoCandidato', async function(req, res) {
 
+    const { error } = schemaGet.validate(req.params)
+    if (error) {
+        return res.status(400).json(
+            {error: error.details[0].message}
+        )
+      }
     const { correoCandidato } = req.params
     var result = await logicaCandidato.obtener(correoCandidato);
     if(!result){
@@ -16,6 +35,12 @@ router.get('/info/:correoCandidato', async function(req, res) {
 
 router.post('/', async function(req, res) {
     try {
+        const { error } = schemaPost.validate(req.body)
+        if (error) {
+            return res.status(400).json(
+                {error: error.details[0].message}
+            )
+        }
         const candidatoIn = req.body
         var result = await logicaCandidato.crear(candidatoIn);
         if(!result){
@@ -29,7 +54,6 @@ router.post('/', async function(req, res) {
 });
 
 router.get('/metadata/', async function(req, res) {
-    console.log("Aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
     var result = await logicaCandidato.obtenerMetadata();
     if(!result){
         res.status(400).send();    
