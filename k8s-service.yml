@@ -96,26 +96,4 @@ spec:
           service:
             name: servicio-candidato
             port: 
-              number: 80
-      - pathType: Prefix
-        path: /registro
-        backend:
-          service:
-            name: servicio-registro
-            port: 
-              number: 80
-      - pathType: Prefix
-        path: /empresa
-        backend:
-          service:
-            name: servicio-empresa
-            port: 
-              number: 80              
-      - pathType: Prefix
-        path: /evaluacion
-        backend:
-          service:
-            name: servicio-evaluacion
-            port: 
-              number: 80
-      
+              number: 80    
