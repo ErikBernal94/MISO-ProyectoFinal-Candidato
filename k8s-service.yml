@@ -19,7 +19,7 @@ spec:
   # K8s agrupa los elementos del Deployment y los interconecta entre si utilizando etiquetas
   # Aqui definimos como seleccionar los elementos juntos
   selector:
-    # En este caso va a seleccionar aquellos que coincidan con el nombre del  deploy
+    # En este caso va a seleccionar aquellos que coincidan con el nombre del deploy
     matchLabels:
       app: candidato
 
