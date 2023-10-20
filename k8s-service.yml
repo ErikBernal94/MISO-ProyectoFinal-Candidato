@@ -35,7 +35,7 @@ spec:
       # image: Nombre de la imagen, por defecto buscara en Docker Hub o en el repositorio privado
       #        configurado en K8s 
       containers:
-        - name: job-cloudbuild
+        - name: candidato
           image: us-central1-docker.pkg.dev/abc-jobs-cicd/repository-candidato/job-cloudbuild:4a9ba6f
           resources:
             requests:
@@ -50,7 +50,7 @@ spec:
           imagePullPolicy: Always
 
 # Vamos a especificar el balanceador de carga en este mismo archivo
-# para ello vamos a crear otro documento separado, esto se hace con el operador  "---"
+# para ello vamos a crear otro documento separado, esto se hace con el operador "---"
 ---
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
@@ -96,4 +96,26 @@ spec:
           service:
             name: servicio-candidato
             port: 
-              number: 80    
+              number: 80
+      - pathType: Prefix
+        path: /registro
+        backend:
+          service:
+            name: servicio-registro
+            port: 
+              number: 80
+      - pathType: Prefix
+        path: /empresa
+        backend:
+          service:
+            name: servicio-empresa
+            port: 
+              number: 80              
+      - pathType: Prefix
+        path: /evaluacion
+        backend:
+          service:
+            name: servicio-evaluacion
+            port: 
+              number: 80
+      
