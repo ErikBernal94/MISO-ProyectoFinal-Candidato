@@ -87,6 +87,8 @@ metadata:
   labels:
     name: gateway-ingress
 spec:
+  tls:
+  - secretName: ingress-local-cert
   rules:
   - http:
       paths:
