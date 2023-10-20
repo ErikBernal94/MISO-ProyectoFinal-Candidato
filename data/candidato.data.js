@@ -83,11 +83,11 @@ class CandidatoData{
                 }
                 let habilidadesBlandasDB = await habilidad_blanda.findAll({where: {id: {[Op.in]: candidato.habilidadesBlandas}}});
                 for(let hb of habilidadesBlandasDB){
-                    await candidatoDB.addHabilidadBlanda(hb);
+                    await candidatoDB.addHabilidadesBlanda(hb);
                 }
                 let habilidadesTecnicasDB = await habilidad_tecnica.findAll({where: {id: {[Op.in]: candidato.habilidadesTecnicas}}});
                 for(let ht of habilidadesTecnicasDB){
-                    await candidatoDB.addHabilidadTecnica(ht);
+                    await candidatoDB.addHabilidadesTecnica(ht);
                 }
                 let idiomasDB = await idioma.findAll({where: {id: {[Op.in]: candidato.idiomas}}});
                 for(let i of idiomasDB){
