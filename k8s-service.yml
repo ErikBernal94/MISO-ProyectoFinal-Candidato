@@ -110,12 +110,5 @@ spec:
           service:
             name: servicio-empresa
             port: 
-              number: 80              
-      - pathType: Prefix
-        path: /evaluacion
-        backend:
-          service:
-            name: servicio-evaluacion
-            port: 
               number: 80
       
