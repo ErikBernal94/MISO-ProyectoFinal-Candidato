@@ -12,7 +12,13 @@ const schemaPost = Joi.object({
     email: Joi.string().min(6).max(200).required().email(),
     edad: Joi.number().integer().min(0).required(),
     id_pais: Joi.number().integer().min(0).required(),
-    numero_telefono: Joi.string().min(6).max(20).required()
+    numero_telefono: Joi.string().min(6).max(20).required(),
+    experiencia: Joi.array().required(),
+    informacionAcademica: Joi.array().required(),
+    habilidadesBlandas: Joi.array().required(),
+    habilidadesTecnicas: Joi.array().required(),
+    idiomas: Joi.array().required(),
+
 });
 
 
