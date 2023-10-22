@@ -5,6 +5,7 @@ const { habilidad_blanda } = require('./habilidad_blanda.model');
 const { habilidad_tecnica } = require('./habilidad_tecnica.model');
 const { idioma } = require('./idioma.model');
 const informacionAcademica = require('./info_academica.model');
+const { pais } = require('./pais.model');
 const usuario = require('./usuario.model');
 
 
@@ -34,6 +35,8 @@ const candidato = sequelize.define('candidato', {
 
   usuario.hasOne(candidato, {foreignKey: 'id_usuario'});
   candidato.belongsTo(usuario, {foreignKey: 'id_usuario'});
+  pais.hasOne(candidato, {foreignKey: 'id_pais', as: 'paisOrigen'});
+  candidato.belongsTo(pais, {foreignKey: 'id_pais', as: 'paisOrigen'});
   candidato.hasMany(informacionAcademica, {as:'informacionAcademica', foreignKey: 'id_candidato'});
   informacionAcademica.belongsTo(candidato, {as:'informacionAcademica', foreignKey: 'id_candidato'});
   candidato.hasMany(experiencia, {foreignKey: 'id_candidato'});

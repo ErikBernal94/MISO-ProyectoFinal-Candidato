@@ -27,6 +27,11 @@ class CandidatoData{
                             }
                         },
                         {
+                            model: pais,
+                            required: false,
+                            as: 'paisOrigen'
+                        },
+                        {
                             model: experiencia,
                             required: false,
                             attributes: {exclude: ["id_rol"]},
