@@ -5,6 +5,7 @@ const { habilidad_blanda } = require("../db/habilidad_blanda.model");
 const { habilidad_tecnica } = require("../db/habilidad_tecnica.model");
 const { idioma } = require("../db/idioma.model");
 const informacionAcademica = require("../db/info_academica.model");
+const { pais } = require("../db/pais.model");
 const usuario = require("../db/usuario.model");
 
 class CandidatoData{
@@ -112,7 +113,9 @@ class CandidatoData{
                 let habilidadesBlandas = await habilidad_blanda.findAll();
                 let idiomas= await idioma.findAll();
                 let roles= await rol.findAll();
+                let paises = await pais.findAll();
                 let metadata =  {
+                    paises: paises,
                     habilidadesTecnicas: habilidadesTecnicas,
                     habilidadesBlandas: habilidadesBlandas,
                     idiomas: idiomas,
