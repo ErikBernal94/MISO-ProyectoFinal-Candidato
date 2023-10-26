@@ -6,9 +6,9 @@ class CandidatoLogic {
 
     }
 
-    obtenerMetadata(){
+    obtenerMetadata(language){
         return new Promise(async (resolve,reject)=>{
-            var candidato = await candidatoData.obtenerMetadata();
+            var candidato = await candidatoData.obtenerMetadata(language);
             resolve(candidato);
         })
     }

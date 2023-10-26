@@ -146,4 +146,9 @@ describe('obtenerMetadata', () =>{
         const result = await data.obtenerMetadata();
         expect(result).toEqual(metadataMock);
     });
+    it('debería obtener metadata correctamente en ingles', async ()=>{
+        
+        const result = await data.obtenerMetadata('en');
+        expect(result).toEqual(metadataMock);
+    });
 });

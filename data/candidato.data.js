@@ -111,14 +111,18 @@ class CandidatoData{
         });
     }
 
-    obtenerMetadata(){
+    obtenerMetadata(language){
+        const filter_habilidad = `descripcion${language ? '_' + language : ''}`;
+        const filter_rol= `rol${language ? '_' + language : ''}`;
+        const filter_pais= `pais${language ? '_' + language : ''}`;
+
         return new Promise(async (resolve,reject)=>{
             try {
-                let habilidadesTecnicas = await habilidad_tecnica.findAll();
-                let habilidadesBlandas = await habilidad_blanda.findAll();
+                let habilidadesTecnicas = await habilidad_tecnica.findAll({attributes: ['id',   filter_habilidad]});
+                let habilidadesBlandas = await habilidad_blanda.findAll({attributes: ['id',   filter_habilidad]});
                 let idiomas= await idioma.findAll();
-                let roles= await rol.findAll();
-                let paises = await pais.findAll();
+                let roles= await rol.findAll({attributes: ['id',   filter_rol]});
+                let paises = await pais.findAll({attributes: ['id',   filter_pais]});
                 let metadata =  {
                     paises: paises,
                     habilidadesTecnicas: habilidadesTecnicas,

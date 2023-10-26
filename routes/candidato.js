@@ -60,7 +60,8 @@ router.post('/', async function(req, res) {
 });
 
 router.get('/metadata/', async function(req, res) {
-    var result = await logicaCandidato.obtenerMetadata();
+    const language = req.query.language;
+    const result = await logicaCandidato.obtenerMetadata(language);
     if(!result){
         res.status(400).send();    
     }
