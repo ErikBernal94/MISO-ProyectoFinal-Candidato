@@ -8,16 +8,16 @@ const informacionAcademica = require("../db/info_academica.model");
 const { pais } = require("../db/pais.model");
 const usuario = require("../db/usuario.model");
 
-class CandidatoData{
+class CandidatoData {
     constructor() {
 
     }
 
-    obtener(correoCandidato){
-        return new Promise(async (resolve,reject)=>{
+    obtener(correoCandidato) {
+        return new Promise(async (resolve, reject) => {
             try {
                 var candidato = await candidatoModel.findAll({
-                    attributes: {exclude: ["id_usuario"]},
+                    attributes: { exclude: ["id_usuario"] },
                     include: [
                         {
                             model: usuario,
@@ -34,8 +34,8 @@ class CandidatoData{
                         {
                             model: experiencia,
                             required: false,
-                            attributes: {exclude: ["id_rol"]},
-                            include : {
+                            attributes: { exclude: ["id_rol"] },
+                            include: {
                                 model: rol,
                                 required: false
                             }
@@ -68,74 +68,75 @@ class CandidatoData{
                             required: false,
                             as: 'informacionAcademica'
                         },
-    
+
                     ]
                 });
-                resolve(candidato[0]);    
+                resolve(candidato[0]);
             } catch (error) {
                 reject(error);
             }
-            
+
         });
     }
 
-    insertar(candidato, usuario){
-        return new Promise(async (resolve, reject)=>{
+    insertar(candidato, usuario) {
+        return new Promise(async (resolve, reject) => {
             try {
-                let candidatoDB = await candidatoModel.findOrCreate({where: {id_usuario: usuario.id}, defaults: candidato});
+                let candidatoDB = await candidatoModel.findOrCreate({ where: { id_usuario: usuario.id }, defaults: candidato });
                 candidatoDB = candidatoDB[0];
-                for(let exp of candidato.experiencia){
-                    await experiencia.findOrCreate({ where:{nombre_empresa: exp.nombre_empresa, id_rol: exp.id_rol, id_candidato: candidatoDB.id }, defaults: exp});
+                for (let exp of candidato.experiencia) {
+                    await experiencia.findOrCreate({ where: { nombre_empresa: exp.nombre_empresa, id_rol: exp.id_rol, id_candidato: candidatoDB.id }, defaults: exp });
                 }
-                let habilidadesBlandasDB = await habilidad_blanda.findAll({where: {id: {[Op.in]: candidato.habilidadesBlandas}}});
-                for(let hb of habilidadesBlandasDB){
+                let habilidadesBlandasDB = await habilidad_blanda.findAll({ where: { id: { [Op.in]: candidato.habilidadesBlandas } } });
+                for (let hb of habilidadesBlandasDB) {
                     await candidatoDB.addHabilidadesBlanda(hb);
                 }
-                let habilidadesTecnicasDB = await habilidad_tecnica.findAll({where: {id: {[Op.in]: candidato.habilidadesTecnicas}}});
-                for(let ht of habilidadesTecnicasDB){
+                let habilidadesTecnicasDB = await habilidad_tecnica.findAll({ where: { id: { [Op.in]: candidato.habilidadesTecnicas } } });
+                for (let ht of habilidadesTecnicasDB) {
                     await candidatoDB.addHabilidadesTecnica(ht);
                 }
-                let idiomasDB = await idioma.findAll({where: {id: {[Op.in]: candidato.idiomas}}});
-                for(let i of idiomasDB){
+                let idiomasDB = await idioma.findAll({ where: { id: { [Op.in]: candidato.idiomas } } });
+                for (let i of idiomasDB) {
                     await candidatoDB.addIdioma(i);
                 }
-                for(let info of candidato.informacionAcademica){
-                    await informacionAcademica.findOrCreate({ where:{institucion: info.institucion, titulo: info.titulo, id_candidato: candidatoDB.id }, defaults: info});
+                for (let info of candidato.informacionAcademica) {
+                    await informacionAcademica.findOrCreate({ where: { institucion: info.institucion, titulo: info.titulo, id_candidato: candidatoDB.id }, defaults: info });
                 }
-                resolve(candidatoDB);    
+                resolve(candidatoDB);
             } catch (error) {
                 console.log(error);
                 reject(error);
             }
-            
+
         });
     }
 
-    obtenerMetadata(language){
+    obtenerMetadata(language) {
         const filter_habilidad = `descripcion${language ? '_' + language : ''}`;
-        const filter_rol= `rol${language ? '_' + language : ''}`;
-        const filter_pais= `pais${language ? '_' + language : ''}`;
+        const filter_rol = `rol${language ? '_' + language : ''}`;
+        const filter_pais = `pais${language ? '_' + language : ''}`;
+        const filter_lang = `idioma${language ? '_' + language : ''}`;
 
-        return new Promise(async (resolve,reject)=>{
+        return new Promise(async (resolve, reject) => {
             try {
-                let habilidadesTecnicas = await habilidad_tecnica.findAll({attributes: ['id',   filter_habilidad]});
-                let habilidadesBlandas = await habilidad_blanda.findAll({attributes: ['id',   filter_habilidad]});
-                let idiomas= await idioma.findAll();
-                let roles= await rol.findAll({attributes: ['id',   filter_rol]});
-                let paises = await pais.findAll({attributes: ['id',   filter_pais]});
-                let metadata =  {
+                let habilidadesTecnicas = await habilidad_tecnica.findAll({ attributes: ['id', [filter_habilidad, 'descripcion']] });
+                let habilidadesBlandas = await habilidad_blanda.findAll({ attributes: ['id', [filter_habilidad, 'descripcion']] });
+                let idiomas = await idioma.findAll({ attributes: ['id', [filter_lang, 'idioma']] });
+                let roles = await rol.findAll({ attributes: ['id', [filter_rol, 'rol']] });
+                let paises = await pais.findAll({ attributes: ['id', [filter_pais, 'pais']] });
+                let metadata = {
                     paises: paises,
                     habilidadesTecnicas: habilidadesTecnicas,
                     habilidadesBlandas: habilidadesBlandas,
                     idiomas: idiomas,
                     roles: roles
                 }
-                
+
                 resolve(metadata);
             } catch (error) {
                 reject(error);
             }
-            
+
         })
     }
 }
