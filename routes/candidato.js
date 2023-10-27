@@ -22,7 +22,7 @@ const schemaPost = Joi.object({
 });
 
 
-//  router get candidato
+//  router get  candidato
 router.get('/info/:correoCandidato', async function(req, res) {
 
     const { error } = schemaGet.validate(req.params)
