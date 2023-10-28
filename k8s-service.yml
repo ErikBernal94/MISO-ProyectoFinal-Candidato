@@ -36,7 +36,7 @@ spec:
       #        configurado en K8s 
       containers:
         - name: candidato
-          image: us-central1-docker.pkg.dev/abc-jobs-cicd/repository-candidato/job-cloudbuild:5d0bf30
+          image: us-central1-docker.pkg.dev/abc-jobs-cicd/repository-candidato/job-cloudbuild:8addd85
           resources:
             requests:
               memory: "64Mi"
