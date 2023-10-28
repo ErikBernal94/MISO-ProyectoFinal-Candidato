@@ -21,6 +21,15 @@ const schemaPost = Joi.object({
 
 });
 
+const schemaPostExp = Joi.object({
+    id_candidato: Joi.number().integer().min(0).required(),
+    experiencia: Joi.object().required(),
+});
+
+const schemaPostInfoAcademica = Joi.object({
+    id_candidato: Joi.number().integer().min(0).required(),
+    informacionAcademica: Joi.object().required(),
+});
 
 //  router get  candidato
 router.get('/info/:correoCandidato', async function(req, res) {
@@ -57,6 +66,44 @@ router.post('/', async function(req, res) {
         res.status(500).send(error);
     }
     
+});
+
+router.post('/experiencia', async function(req, res) {
+    try {
+        const { error } = schemaPostExp.validate(req.body)
+        if (error) {
+            return res.status(400).json(
+                {error: error.details[0].message}
+            )
+        }
+        const {id_candidato, experiencia } = req.body
+        var result = await logicaCandidato.agregarExperiencia(id_candidato, experiencia);
+        if(!result){
+            res.status(400).send();    
+        }
+        res.status(200).send(result);    
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+router.post('/infoAcademica', async function(req, res) {
+    try {
+        const { error } = schemaPostInfoAcademica.validate(req.body)
+        if (error) {
+            return res.status(400).json(
+                {error: error.details[0].message}
+            )
+        }
+        const {id_candidato, informacionAcademica } = req.body
+        var result = await logicaCandidato.agregarInformacionAcademica(id_candidato, informacionAcademica);
+        if(!result){
+            res.status(400).send();    
+        }
+        res.status(200).send(result);    
+    } catch (error) {
+        res.status(500).send(error);
+    }
 });
 
 router.get('/metadata/', async function(req, res) {

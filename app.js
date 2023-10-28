@@ -7,7 +7,6 @@ var cors = require('cors');
 
 var candidatoRouter = require('./routes/candidato');
 var healthcheckRouter = require('./routes/healthcheck');
-var validateToken = require("./routes/validate-token")
 
 var app = express();
 
@@ -22,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/candidato',validateToken, candidatoRouter);
+app.use('/candidato', candidatoRouter);
 // app.use('/evaluacion/pregunta', preguntasRouter);
 app.use('/candidato/healthcheck', healthcheckRouter);
 
