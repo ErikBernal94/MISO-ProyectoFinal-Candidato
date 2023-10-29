@@ -29,6 +29,18 @@ class CandidatoLogic {
         })
     }
 
+    obtenerPorCaracteristicas(roles,paises,habilidadesBlandas,habilidadesTecnicas){
+        return new Promise(async (resolve,reject)=>{
+            try {
+                var candidatos = await candidatoData.obtenerPorCaracteristicas(roles,paises,habilidadesBlandas,habilidadesTecnicas);
+                resolve(candidatos);    
+            } catch (error) {
+                reject(error);
+            }
+            
+        })
+    }
+
     crear(candidato){
         return new Promise(async (resolve,reject)=>{
             try {

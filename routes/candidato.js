@@ -21,6 +21,16 @@ const schemaPost = Joi.object({
 
 });
 
+const schemaBuscar = Joi.object({
+    
+    roles: Joi.array().required(),
+    paises: Joi.array().required(),
+    habilidadesBlandas: Joi.array().required(),
+    habilidadesTecnicas: Joi.array().required(),
+    
+
+});
+
 
 //  router get  candidato
 router.get('/info/:correoCandidato', async function(req, res) {
@@ -33,6 +43,22 @@ router.get('/info/:correoCandidato', async function(req, res) {
       }
     const { correoCandidato } = req.params
     var result = await logicaCandidato.obtener(correoCandidato);
+    if(!result){
+        res.status(400).send();    
+    }
+    res.status(200).send(result);
+});
+
+router.post('/buscar', async function(req, res) {
+
+    const { error } = schemaBuscar.validate(req.body)
+    if (error) {
+        return res.status(400).json(
+            {error: error.details[0].message}
+        )
+      }
+    const { paises, roles, habilidadesBlandas, habilidadesTecnicas } = req.body
+    var result = await logicaCandidato.obtenerPorCaracteristicas(roles, paises, habilidadesBlandas, habilidadesTecnicas);
     if(!result){
         res.status(400).send();    
     }
