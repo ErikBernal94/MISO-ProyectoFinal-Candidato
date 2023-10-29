@@ -163,6 +163,10 @@ class CandidatoData {
 
         });
     }
+    async obtenerPorId(idCandidato){
+        let candidatoDB = await candidatoModel.findByPk(idCandidato);
+        return candidatoDB;
+    }
 
     insertar(candidato, usuario) {
         return new Promise(async (resolve, reject) => {
@@ -193,6 +197,28 @@ class CandidatoData {
                 reject(error);
             }
 
+        });
+    }
+
+    insertarExperiencia(idCandidato, experienciaIn){
+        return new Promise(async (resolve,reject)=>{
+            try {
+                await experiencia.create({id_candidato: idCandidato, ...experienciaIn});
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
+    insertarInformacionAcademica(idCandidato, infoAcademica){
+        return new Promise(async (resolve,reject)=>{
+            try {
+                await informacionAcademica.create({id_candidato: idCandidato, ...infoAcademica});
+                resolve();
+            } catch (error) {
+                reject(error);
+            }
         });
     }
 

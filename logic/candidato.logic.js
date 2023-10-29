@@ -59,6 +59,40 @@ class CandidatoLogic {
         })
     }
 
+    agregarExperiencia(idCandidato, experiencia){
+        return new Promise(async (resolve,reject)=>{
+            try {
+                let candidatoDB = await candidatoData.obtenerPorId(idCandidato);
+                if(!candidatoDB) {
+                    reject('El usuario no esta registrado');
+                    return;
+                }
+                await candidatoData.insertarExperiencia(idCandidato,experiencia);
+                resolve('Informacion de candidato actualizada/insertada');    
+            } catch (error) {
+                reject(error);
+            }
+            
+        });
+    }
+
+    agregarInformacionAcademica(idCandidato, infoAcademica){
+        return new Promise(async (resolve,reject)=>{
+            try {
+                let candidatoDB = await candidatoData.obtenerPorId(idCandidato);
+                if(!candidatoDB) {
+                    reject('El usuario no esta registrado');
+                    return;
+                }
+                await candidatoData.insertarInformacionAcademica(idCandidato,infoAcademica);
+                resolve('Informacion de candidato actualizada/insertada');    
+            } catch (error) {
+                reject(error);
+            }
+            
+        });
+    }
+
 }
 
 const candidato = new CandidatoLogic()
