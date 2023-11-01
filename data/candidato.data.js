@@ -22,6 +22,7 @@ class CandidatoData {
                         {
                             model: usuario,
                             required: true,
+                            attributes: { exclude: ["contrasena"] },
                             where: {
                                 email: correoCandidato
                             }
@@ -79,6 +80,89 @@ class CandidatoData {
         });
     }
 
+    obtenerPorCaracteristicas(roles, paises, habilidadesBlandas, habilidadesTecnicas){
+        return new Promise(async (resolve, reject) => {
+            try {
+                var candidato = await candidatoModel.findAll({
+                    attributes: { exclude: ["id_usuario"] },
+                    include: [
+                        {
+                            model: usuario,
+                            required: true,
+                            attributes: { exclude: ["contrasena"] }
+                        },
+                        {
+                            model: pais,
+                            required: paises.length > 0,
+                            as: 'paisOrigen',
+                            where: {
+                                id: {
+                                    [Op.in]: paises 
+                                }
+                            }
+                        },
+                        {
+                            model: experiencia,
+                            required: roles.length > 0,
+                            attributes: { exclude: ["id_rol"] },
+                            include: {
+                                model: rol,
+                                required: roles.length > 0,
+                                where: {
+                                    id: {
+                                        [Op.in]: roles 
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            model: habilidad_blanda,
+                            required: habilidadesBlandas.length > 0,
+                            through: {
+                                attributes: []
+                            },
+                            as: "habilidadesBlandas",
+                            where: {
+                                id: {
+                                    [Op.in]: habilidadesBlandas 
+                                }
+                            }
+                        },
+                        {
+                            model: habilidad_tecnica,
+                            required: habilidadesTecnicas.length > 0,
+                            through: {
+                                attributes: []
+                            },
+                            as: 'habilidadesTecnicas',
+                            where: {
+                                id: {
+                                    [Op.in]: habilidadesTecnicas 
+                                }
+                            }
+                        },
+                        {
+                            model: idioma,
+                            required: false,
+                            through: {
+                                attributes: []
+                            }
+                        },
+                        {
+                            model: informacionAcademica,
+                            required: false,
+                            as: 'informacionAcademica'
+                        },
+
+                    ]
+                });
+                resolve(candidato);
+            } catch (error) {
+                reject(error);
+            }
+
+        });
+    }
     async obtenerPorId(idCandidato){
         let candidatoDB = await candidatoModel.findByPk(idCandidato);
         return candidatoDB;
