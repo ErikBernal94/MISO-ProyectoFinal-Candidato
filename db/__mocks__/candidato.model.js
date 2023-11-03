@@ -73,9 +73,12 @@ const candidatoMock = {
 }
 
 class Candidato{
+    candidatoValue = null;
     constructor(candidatoMock= null){
-
+        this.candidatoValue = candidatoMock;
     }
+
+    
 
     findAll(object){
         return new Promise(async (resolve,reject)=>{
@@ -89,6 +92,14 @@ class Candidato{
         return new Promise(async (resolve,reject)=>{
             resolve([
                 new Candidato(candidatoMock) 
+            ]);
+        });
+    }
+
+    findByPk(idCandidato){
+        return new Promise(async (resolve,reject)=>{
+            resolve([
+                candidatoMock
             ]);
         });
     }
