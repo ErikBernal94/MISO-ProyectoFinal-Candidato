@@ -85,11 +85,11 @@ router.post('/', async function(req, res) {
         const candidatoIn = req.body
         var result = await logicaCandidato.crear(candidatoIn);
         if(!result){
-            res.status(400).send();    
+            res.status(400).json();    
         }
-        res.status(200).send(result);    
+        res.status(200).json(result);    
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).json(error);
     }
     
 });
@@ -105,11 +105,11 @@ router.post('/experiencia', async function(req, res) {
         const {id_candidato, experiencia } = req.body
         var result = await logicaCandidato.agregarExperiencia(id_candidato, experiencia);
         if(!result){
-            res.status(400).send();    
+            res.status(400).json();    
         }
-        res.status(200).send(result);    
+        res.status(200).json(result);    
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).json(error);
     }
 });
 
@@ -124,11 +124,11 @@ router.post('/infoAcademica', async function(req, res) {
         const {id_candidato, informacionAcademica } = req.body
         var result = await logicaCandidato.agregarInformacionAcademica(id_candidato, informacionAcademica);
         if(!result){
-            res.status(400).send();    
+            res.status(400).json();    
         }
-        res.status(200).send(result);    
+        res.status(200).json(result);    
     } catch (error) {
-        res.status(500).send(error);
+        res.status(500).json(error);
     }
 });
 

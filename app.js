@@ -7,6 +7,7 @@ var cors = require('cors');
 
 var candidatoRouter = require('./routes/candidato');
 var healthcheckRouter = require('./routes/healthcheck');
+var entrevistaRouter = require('./routes/entrevista');
 
 var app = express();
 
@@ -22,7 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/candidato', candidatoRouter);
-// app.use('/evaluacion/pregunta', preguntasRouter);
+app.use('/candidato/entrevista', entrevistaRouter);
 app.use('/candidato/healthcheck', healthcheckRouter);
 
 
