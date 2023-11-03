@@ -152,3 +152,31 @@ describe('obtenerMetadata', () =>{
         expect(result).toEqual(metadataMock);
     });
 });
+
+describe('obtener por caracteristicas', () =>{
+    it('debería obtener candidato correctamente', async ()=>{
+        const roles = [1,2]; 
+        const paises = [1,2]; 
+        const habilidadesBlandas = [1,2]; 
+        const habilidadesTecnicas = [1,2]; 
+        const result = await data.obtenerPorCaracteristicas(roles, paises, habilidadesBlandas, habilidadesTecnicas);
+        expect(result).toEqual([candidatoMock]);
+    });
+});
+
+describe('obtener por id', () =>{
+    it('debería obtener candidato correctamente', async ()=>{
+        const idCandidato = 1;
+        const result = await data.obtenerPorId(idCandidato);
+        expect(result).toEqual([candidatoMock]);
+    });
+});
+
+describe('insertar', () =>{
+    it('debería insertar correctamente', async ()=>{
+        const candidato = candidatoMock;
+        const usuario = candidatoMock.usuario;
+        const result = await data.insertar(candidato, usuario);
+        expect(result.candidatoValue).toEqual(candidatoMock);
+    });
+});
