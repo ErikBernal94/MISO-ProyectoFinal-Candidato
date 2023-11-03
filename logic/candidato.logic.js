@@ -50,9 +50,10 @@ class CandidatoLogic {
                     return;
                 }
                 console.log(usuariosBD);
-                await candidatoData.insertar(candidato, usuariosBD);
-                resolve('Informacion de candidato actualizada/insertada');    
+                var result = await candidatoData.insertar(candidato, usuariosBD);
+                resolve({id: result.id, email: candidato.email, mensaje: "Informacion de candidato actualizada/insertada"});    
             } catch (error) {
+                console.log(error);
                 reject(error);
             }
             
