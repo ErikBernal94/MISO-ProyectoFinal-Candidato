@@ -10,6 +10,9 @@ const idioma = sequelize.define('idioma', {
     },
     idioma: {
         type: DataTypes.STRING
+    },
+    idioma_en: {
+        type: DataTypes.STRING
     }
   }, {
     tableName: 'idioma',

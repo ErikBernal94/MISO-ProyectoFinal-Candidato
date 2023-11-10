@@ -10,6 +10,9 @@ const habilidad_tecnica = sequelize.define('habilidadTecnica', {
     },
     descripcion: {
         type: DataTypes.STRING
+    },
+    descripcion_en: {
+        type: DataTypes.STRING
     }
   }, {
     tableName: 'habilidad_tecnica',
