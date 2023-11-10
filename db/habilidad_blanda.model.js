@@ -10,6 +10,9 @@ const habilidad_blanda = sequelize.define('habilidadBlanda', {
     },
     descripcion: {
         type: DataTypes.STRING
+    },
+    descripcion_en: {
+        type: DataTypes.STRING
     }
   }, {
     tableName: 'habilidad_blanda',
