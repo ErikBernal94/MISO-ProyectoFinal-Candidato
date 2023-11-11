@@ -141,6 +141,14 @@ router.get('/metadata/', async function(req, res) {
     res.status(200).send(result);
 });
 
+router.get('/', async function(req, res) {
+    var result = await logicaCandidato.obtenerTodos();
+    if(!result){
+        res.status(400).send();    
+    }
+    res.status(200).send(result);
+});
+
 module.exports = router;
 
 
