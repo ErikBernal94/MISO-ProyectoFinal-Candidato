@@ -250,6 +250,30 @@ class CandidatoData {
 
         })
     }
+
+    obtenerTodos() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                var candidato = await candidatoModel.findAll({
+                    attributes: {exclude: ["id_usuario"]},
+                    through: {
+                        attributes: []
+                    },
+                    include: [
+                        {
+                            model: usuario,
+                            required: false,
+                            attributes: {exclude: ["contrasena"]},
+                        },  
+                    ]
+                });
+                resolve(candidato);
+            } catch (error) {
+                reject(error);
+            }
+
+        });
+    }
 }
 
 const candidatoData = new CandidatoData();
