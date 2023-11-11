@@ -94,6 +94,19 @@ class CandidatoLogic {
         });
     }
 
+    obtenerTodos(){
+        return new Promise(async (resolve,reject)=>{
+            try {
+                console.log('entrooe1o')
+                var candidato = await candidatoData.obtenerTodos();
+                resolve(candidato);    
+            } catch (error) {
+                reject(error);
+            }
+            
+        })
+    }
+
 }
 
 const candidato = new CandidatoLogic()
