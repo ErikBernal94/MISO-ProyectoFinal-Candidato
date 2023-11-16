@@ -3,7 +3,7 @@ const sequelize = require("./db");
 const usuario = require('./usuario.model');
 
 
-const entrevista = sequelize.define('experiencia', {
+const entrevista = sequelize.define('entrevista', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -42,6 +42,9 @@ const entrevista = sequelize.define('experiencia', {
     },
     id_usuario: {
         type: DataTypes.INTEGER
+    },
+    resultados:{
+      type: DataTypes.STRING
     }
     }, {
     tableName: 'entrevista_usuario',
@@ -60,4 +63,4 @@ const entrevista = sequelize.define('experiencia', {
     otherKey: 'id_entrevista'
   });
 
-module.exports = { entrevista };
+module.exports = { entrevista, entrevista_usuario};
