@@ -15,6 +15,9 @@ const usuario = sequelize.define('usuario', {
     },
     contrasena: {
         type: DataTypes.STRING
+    },
+    id_tipo_usuario: {
+        type: DataTypes.STRING
     }
   }, {
     tableName: 'usuarios',

@@ -3,7 +3,7 @@ const sequelize = require("./db");
 const usuario = require('./usuario.model');
 
 
-const entrevista = sequelize.define('experiencia', {
+const entrevista = sequelize.define('entrevista', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -24,6 +24,9 @@ const entrevista = sequelize.define('experiencia', {
     },
     activa: {
         type: DataTypes.BOOLEAN
+    },
+    resultados:{
+      type: DataTypes.STRING
     }
   }, {
     tableName: 'entrevista',

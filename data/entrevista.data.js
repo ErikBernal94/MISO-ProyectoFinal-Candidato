@@ -8,7 +8,14 @@ class EntrevistaData{
 
     obtener(idUsuario){
         return new Promise(async (resolve,reject)=>{
+            let usuarioExiste = await usuario.findAll({where: {id: idUsuario}});
+            let excluir = [];
+            if (usuarioExiste.length > 0 && usuarioExiste[0].dataValues.id_tipo_usuario === 2){
+                excluir = ["resultados"];
+            }
+            console.log(excluir)
             var entrevistaDB = await entrevista.findAll({
+                attributes: { exclude: excluir },
                 include: [
                     {
                         model: usuario,
@@ -22,7 +29,7 @@ class EntrevistaData{
                         }
                     }
                 ]
-              });
+              },);
             resolve(entrevistaDB);
         });
     }
