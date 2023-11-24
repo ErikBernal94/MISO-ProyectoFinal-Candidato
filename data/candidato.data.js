@@ -83,23 +83,18 @@ class CandidatoData {
     obtenerPorCaracteristicas(roles, paises, habilidadesBlandas, habilidadesTecnicas){
         return new Promise(async (resolve, reject) => {
             try {
-                var candidato = await candidatoModel.findAll({
-                    attributes: { exclude: ["id_usuario"] },
+                const whereRol = roles.length > 0 ? { id: {[Op.in]: roles}} : {}
+                const wherePaises = paises.length > 0 ? { id: {[Op.in]: paises}} : {}
+                const whereHB = habilidadesBlandas.length > 0 ? { id: {[Op.in]: habilidadesBlandas}} : {}
+                const whereHT = habilidadesTecnicas.length > 0 ? { id: {[Op.in]: habilidadesTecnicas}} : {}
+                const candidatosFiltrados = await candidatoModel.findAll({
+                    attributes: ['id'],
                     include: [
-                        {
-                            model: usuario,
-                            required: true,
-                            attributes: { exclude: ["contrasena"] }
-                        },
                         {
                             model: pais,
                             required: paises.length > 0,
                             as: 'paisOrigen',
-                            where: {
-                                id: {
-                                    [Op.in]: paises 
-                                }
-                            }
+                            where: wherePaises
                         },
                         {
                             model: experiencia,
@@ -108,11 +103,7 @@ class CandidatoData {
                             include: {
                                 model: rol,
                                 required: roles.length > 0,
-                                where: {
-                                    id: {
-                                        [Op.in]: roles 
-                                    }
-                                }
+                                where: whereRol
                             }
                         },
                         {
@@ -122,11 +113,7 @@ class CandidatoData {
                                 attributes: []
                             },
                             as: "habilidadesBlandas",
-                            where: {
-                                id: {
-                                    [Op.in]: habilidadesBlandas 
-                                }
-                            }
+                            where: whereHB
                         },
                         {
                             model: habilidad_tecnica,
@@ -135,11 +122,51 @@ class CandidatoData {
                                 attributes: []
                             },
                             as: 'habilidadesTecnicas',
-                            where: {
-                                id: {
-                                    [Op.in]: habilidadesTecnicas 
-                                }
+                            where: whereHT
+                        }
+                    ]
+                });
+                
+                const candidatosIds = candidatosFiltrados.map(c => c.id);
+
+                const candidatos = await candidatoModel.findAll({
+                    attributes: { exclude: ["id_usuario"] },
+                    where: { id: {[Op.in]: candidatosIds}},
+                    include: [
+                        {
+                            model: usuario,
+                            required: true,
+                            attributes: { exclude: ["contrasena"] }
+                        },
+                        {
+                            model: pais,
+                            required: false,
+                            as: 'paisOrigen'
+                        },
+                        {
+                            model: experiencia,
+                            required: false,
+                            attributes: { exclude: ["id_rol"] },
+                            include: {
+                                model: rol,
+                                required: false
                             }
+                        },
+                        {
+                            model: habilidad_blanda,
+                            required: false,
+                            through: {
+                                attributes: []
+                            },
+                            as: "habilidadesBlandas"
+                        },
+                        {
+                            model: habilidad_tecnica,
+                            required: false,
+                            through: {
+                                attributes: []
+                            },
+                            as: 'habilidadesTecnicas'
                         },
                         {
                             model: idioma,
@@ -151,12 +178,14 @@ class CandidatoData {
                         {
                             model: informacionAcademica,
                             required: false,
+                            attributes: { exclude: ["id_candidato"] },
                             as: 'informacionAcademica'
                         },
 
                     ]
                 });
-                resolve(candidato);
+
+                resolve(candidatos);
             } catch (error) {
                 reject(error);
             }
